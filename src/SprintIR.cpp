@@ -17,7 +17,7 @@ int SprintIR::getPPM()
     // Flush UART
     while(int a = _serial.available())
     {   
-        DBG("flush %d", a);
+        // DBG("flush %d", a);
         _serial.readBytes(buf, min(a, SPRINT_BUFSIZE-1));
     };
 
@@ -25,12 +25,12 @@ int SprintIR::getPPM()
     _serial.setTimeout(SPRINT_TIMEOUT_MS);
     size_t len = _serial.readBytesUntil('z', buf, SPRINT_BUFSIZE-1);
     buf[len] = 0x00;
-    DBG("%d discarded [%s]", len, buf);
+    // DBG("%d discarded [%s]", len, buf);
 
     // ' #####\r\n' incoming
     len = _serial.readBytes(buf, 8);
     buf[len] = 0x00;
-    DBG("%d read: %s", len, buf);
+    // DBG("%d read: %s", len, buf);
     
 	int ppm ;
 	if(1 != sscanf(buf, " %05d\r\n", &ppm))
