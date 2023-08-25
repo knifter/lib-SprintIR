@@ -21,9 +21,9 @@ int SprintIR::getPPM()
         _serial.readBytes(buf, min(a, SPRINT_BUFSIZE-1));
     };
 
-    // Wait for 'Z'
+    // Wait for 'Z': filtered PPM (z is unfiltered)
     _serial.setTimeout(SPRINT_TIMEOUT_MS);
-    size_t len = _serial.readBytesUntil('z', buf, SPRINT_BUFSIZE-1);
+    size_t len = _serial.readBytesUntil('Z', buf, SPRINT_BUFSIZE-1);
     buf[len] = 0x00;
     // DBG("%d discarded [%s]", len, buf);
 
@@ -39,6 +39,17 @@ int SprintIR::getPPM()
 		return -1;
 	};
 	return ppm;
+};
+
+int SprintIR::getCompensatedPPM(uint P)
+{
+    int C1 = getPPM();
+    double Y;
+    if(C1 < 1500)
+        Y = 2.6661E-16*pow(C1, 4) - 1.1146E-12*pow(C1, 3) + 1.7397E-09*pow(C1, 2) - 1.2556E-06*C1 - 9.8754E-04;
+    else
+        Y = 2.37472E-30*pow(C1, 6) - 2.70695E-25*pow(C1, 5) + 1.24012E-20*pow(C1, 4) - 2.91716E-16*pow(C1, 3) + 3.62939E-12*pow(C1, 2) - 1.82753E-08*C1 - 1.35129E-03;
+    return getPPM() / (1+Y*(1013 - P));
 };
 
 // void SprintIR::command(const char* cmd)

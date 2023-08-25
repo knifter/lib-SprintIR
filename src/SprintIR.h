@@ -11,6 +11,7 @@ class SprintIR
 		bool begin();
 		// setFilter(filtermode_t filter);
 		int getPPM();
+        int getCompensatedPPM(uint P_mbar);
 	private:
 		Stream& _serial;
 };
