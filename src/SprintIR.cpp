@@ -38,7 +38,8 @@ int SprintIR::getPPM()
 		// ERROR("Failed interpret");
 		return -1;
 	};
-	return ppm;
+    // For 0..60% sensors, scaling factor is 10 (Datasheet page 25)
+	return ppm * 10;
 };
 
 int SprintIR::getCompensatedPPM(uint P)
