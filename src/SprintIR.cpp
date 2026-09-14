@@ -1,4 +1,4 @@
-#include "sprintir.h"
+#include "SprintIR.h"
 
 // #include <tools-log.h>
 
